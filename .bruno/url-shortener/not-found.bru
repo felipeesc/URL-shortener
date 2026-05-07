@@ -1,0 +1,21 @@
+meta {
+  name: Not Found
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/INVALID000
+  body: none
+  auth: none
+}
+
+tests {
+  test("status 404", function() {
+    expect(res.getStatus()).to.equal(404);
+  });
+
+  test("has error message", function() {
+    expect(res.getBody()).to.have.property("error");
+  });
+}

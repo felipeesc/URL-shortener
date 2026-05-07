@@ -1,0 +1,21 @@
+meta {
+  name: Redirect URL
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/{{short_code}}
+  body: none
+  auth: none
+}
+
+tests {
+  test("status 302", function() {
+    expect(res.getStatus()).to.equal(302);
+  });
+
+  test("has Location header", function() {
+    expect(res.getHeaders()).to.have.property("location");
+  });
+}

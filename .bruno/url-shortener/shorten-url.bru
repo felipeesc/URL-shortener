@@ -1,0 +1,46 @@
+meta {
+  name: Shorten URL
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/api/v1/shorten
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "url": "https://www.google.com/search?q=url+shortener+java+spring+boot+cassandra"
+  }
+}
+
+vars:pre-request {
+  base_url: http://localhost:8080
+}
+
+script:post-response {
+  const data = res.getBody();
+  if (data && data.shortCode) {
+    bru.setEnvVar("short_code", data.shortCode);
+  }
+}
+
+tests {
+  test("status 201", function() {
+    expect(res.getStatus()).to.equal(201);
+  });
+  
+  test("has shortUrl", function() {
+    expect(res.getBody()).to.have.property("shortUrl");
+  });
+  
+  test("has shortCode", function() {
+    expect(res.getBody()).to.have.property("shortCode");
+  });
+}
